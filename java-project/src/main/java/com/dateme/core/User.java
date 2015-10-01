@@ -1,4 +1,4 @@
-package com.dateme;
+package com.dateme.core;
 
 public class User {
 

@@ -1,4 +1,4 @@
-package com.dateme;
+package com.dateme.core;
 
 import org.junit.Assert;
 import org.junit.Test;

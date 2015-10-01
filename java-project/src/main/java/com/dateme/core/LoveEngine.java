@@ -1,4 +1,4 @@
-package com.dateme;
+package com.dateme.core;
 
 public class LoveEngine {
     public static int compatibility(User user1, User user2) {
