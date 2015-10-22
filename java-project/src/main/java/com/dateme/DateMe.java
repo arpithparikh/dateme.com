@@ -17,9 +17,8 @@ public class DateMe {
         DateMeApi api = new DateMeApi(cachedDao);
 
         if (args[0].equals("create")) {
-            api.createUserAccount(args[1], new RGB(0,0,0), Integer.parseInt(args[2]))
+            api.createUserAccount(args[1], new RGB(0,0,0), Integer.parseInt(args[2]));
         }
-
 
     }
 }
