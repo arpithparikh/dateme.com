@@ -1,7 +1,7 @@
 package com.dateme.api.dao.impl;
 
 import com.dateme.api.dao.DateMeDAO;
-import com.dateme.core.User;
+import com.dateme.core.Profile;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,25 +14,25 @@ public class CachedDAO implements DateMeDAO {
         this.dao = dao;
     }
 
-    public User createUser(User user) {
-        User result = dao.createUser(user);
+    public Profile createUser(Profile profile) {
+        Profile result = dao.createUser(profile);
         //cache result
         return result;
     }
 
-    public Optional<User> getUser(String email) {
+    public Optional<Profile> getUser(String email) {
         return null;
     }
 
-    public User updateUser(User user) {
+    public Profile updateUser(Profile profile) {
         return null;
     }
 
-    public User deleteUser(String email) {
+    public Optional<Profile> deleteUser(String email) {
         return null;
     }
 
-    public List<User> findMostCompatible(User user, int count) {
+    public List<Profile> findMostCompatible(Profile profile, int count) {
         return null;
     }
 }

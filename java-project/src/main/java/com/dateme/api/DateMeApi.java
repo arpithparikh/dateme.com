@@ -2,7 +2,7 @@ package com.dateme.api;
 
 import com.dateme.api.dao.DateMeDAO;
 import com.dateme.core.RGB;
-import com.dateme.core.User;
+import com.dateme.core.Profile;
 
 import java.util.Optional;
 
@@ -14,24 +14,28 @@ public class DateMeApi {
         this.dao = dao;
     }
 
-    public User createUserAccount(String email, RGB c, int n) {
-        User user = new User(email, c, n);
-        User createdUser = dao.createUser(user);
-        return createdUser;
+    public Profile createUserAccount(String email, RGB c, int n) {
+        Profile profile = new Profile(email, c, n);
+        Profile createdProfile = dao.createUser(profile);
+        return createdProfile;
     }
 
-    public Optional<User> findUserAccountByEmail(String email) {
-        Optional<User> result = dao.getUser(email);
+    public Optional<Profile> findUserAccountByEmail(String email) {
+        Optional<Profile> result = dao.getUser(email);
         return result;
     }
 
-    public Optional<User> updateUserAccount(String email, RGB c, int n) {
+    public Optional<Profile> updateUserAccount(String email, RGB c, int n) {
         if (dao.getUser(email).isPresent()) {
-            User user = dao.updateUser(new User(email, c, n));
-            return Optional.of(user);
+            Profile profile = dao.updateUser(new Profile(email, c, n));
+            return Optional.of(profile);
         } else {
             return Optional.empty();
         }
+    }
+
+    public Optional<Profile> removeAccount(String email) {
+        return dao.deleteUser(email);
     }
 
 
