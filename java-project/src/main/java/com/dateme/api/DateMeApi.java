@@ -14,9 +14,8 @@ public class DateMeApi {
         this.dao = dao;
     }
 
-    public Profile createUserAccount(String email, RGB c, int n) {
-        Profile profile = new Profile(email, c, n);
-        Profile createdProfile = dao.createUser(profile);
+    public Profile createUserAccount(Profile p) {
+        Profile createdProfile = dao.createUser(p);
         return createdProfile;
     }
 
