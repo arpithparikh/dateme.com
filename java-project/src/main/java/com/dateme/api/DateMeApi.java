@@ -4,6 +4,7 @@ import com.dateme.api.dao.DateMeDAO;
 import com.dateme.core.model.RGB;
 import com.dateme.core.model.Profile;
 
+import java.util.List;
 import java.util.Optional;
 
 public class DateMeApi {
@@ -38,4 +39,7 @@ public class DateMeApi {
     }
 
 
+    public List<Profile> getAllProfiles() {
+        return dao.allProfiles();
+    }
 }

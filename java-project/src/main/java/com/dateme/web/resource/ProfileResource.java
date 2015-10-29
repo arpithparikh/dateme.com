@@ -8,6 +8,7 @@ import com.dateme.web.json.ProfileJson;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.Optional;
 
 @Path("/api/profile")
@@ -19,6 +20,15 @@ public class ProfileResource {
     public ProfileResource(DateMeApi api) {
         this.api = api;
     }
+
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllProfiles() {
+        List<Profile> profiles = api.getAllProfiles();
+        return Response.ok(profiles.parallelStream().map(ProfileJson::new).toArray()).build();
+    }
+
 
 
     @GET

@@ -6,7 +6,6 @@ import com.dateme.api.dao.impl.SqliteDAO;
 import com.dateme.web.health.DateMeHealthCheck;
 import com.dateme.web.resource.ProfileResource;
 import io.dropwizard.Application;
-import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 
 public class DateMeWeb extends Application<DateMeConfiguration> {

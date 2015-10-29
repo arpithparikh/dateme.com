@@ -11,6 +11,7 @@ public interface DateMeDAO {
     public Optional<Profile> getUser(String email);
     public Profile updateUser(Profile profile);
     public Optional<Profile> deleteUser(String email);
+    public List<Profile> allProfiles();
 
 
 

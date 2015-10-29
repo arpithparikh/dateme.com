@@ -6,7 +6,7 @@ import com.dateme.core.model.Profile;
 import java.util.List;
 import java.util.Optional;
 
-public class MongoDAO implements DateMeDAO {
+public abstract class MongoDAO implements DateMeDAO {
     public Profile createUser(Profile profile) {
         return null;
     }

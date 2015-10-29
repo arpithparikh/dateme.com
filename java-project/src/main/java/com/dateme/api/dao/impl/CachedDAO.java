@@ -6,7 +6,7 @@ import com.dateme.core.model.Profile;
 import java.util.List;
 import java.util.Optional;
 
-public class CachedDAO implements DateMeDAO {
+public abstract class CachedDAO implements DateMeDAO {
 
     final private DateMeDAO dao;
 

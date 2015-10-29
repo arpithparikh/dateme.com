@@ -4,7 +4,9 @@ import com.dateme.api.dao.DateMeDAO;
 import com.dateme.core.model.Profile;
 import com.dateme.core.model.RGB;
 
+import javax.swing.text.html.Option;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -108,6 +110,25 @@ public class SqliteDAO implements DateMeDAO {
             update("DELETE FROM profiles WHERE email=?", p.email);
             return p;
         });
+    }
+
+    @Override
+    public List<Profile> allProfiles() {
+        String query = "SELECT * FROM profiles";
+        try {
+            ResultSet r = query(query).get();
+            ArrayList<Profile> profiles = new ArrayList<>();
+            while (r.next()) {
+                String e = r.getString("email");
+                RGB color = new RGB(r.getString("color"));
+                int number = r.getInt("number");
+                profiles.add(new Profile(e, color, number));
+            }
+            return profiles;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     public List<Profile> findMostCompatible(Profile profile, int count) {
