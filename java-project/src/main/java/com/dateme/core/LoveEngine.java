@@ -1,5 +1,7 @@
 package com.dateme.core;
 
+import com.dateme.core.model.Profile;
+
 public class LoveEngine {
     public static int compatibility(Profile profile1, Profile profile2) {
         int diff = Math.abs(profile1.number - profile2.number);

@@ -1,5 +1,7 @@
 package com.dateme.core;
 
+import com.dateme.core.model.Profile;
+import com.dateme.core.model.RGB;
 import org.junit.Assert;
 import org.junit.Test;
 

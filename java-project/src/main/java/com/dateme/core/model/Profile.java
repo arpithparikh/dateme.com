@@ -1,4 +1,4 @@
-package com.dateme.core;
+package com.dateme.core.model;
 
 public class Profile {
 

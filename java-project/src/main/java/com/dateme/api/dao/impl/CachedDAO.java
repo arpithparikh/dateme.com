@@ -1,7 +1,7 @@
 package com.dateme.api.dao.impl;
 
 import com.dateme.api.dao.DateMeDAO;
-import com.dateme.core.Profile;
+import com.dateme.core.model.Profile;
 
 import java.util.List;
 import java.util.Optional;

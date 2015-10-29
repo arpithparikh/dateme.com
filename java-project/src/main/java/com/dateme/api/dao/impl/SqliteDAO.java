@@ -1,8 +1,8 @@
 package com.dateme.api.dao.impl;
 
 import com.dateme.api.dao.DateMeDAO;
-import com.dateme.core.Profile;
-import com.dateme.core.RGB;
+import com.dateme.core.model.Profile;
+import com.dateme.core.model.RGB;
 
 import java.sql.*;
 import java.util.List;
@@ -12,7 +12,7 @@ public class SqliteDAO implements DateMeDAO {
     private Connection connection = null;
 
     //This should be in an external configuration file
-    private String db = "jdbc:sqlite::memory:";
+    private String db;
 
     //This should be in an external configuration file
     private String initialize = "CREATE TABLE IF NOT EXISTS profiles (email string, color string, number int)";
@@ -54,8 +54,14 @@ public class SqliteDAO implements DateMeDAO {
         }
     }
 
-    public SqliteDAO() throws SQLException {
-        connection = DriverManager.getConnection(db);
+    public SqliteDAO(String dburl) {
+        db = dburl;
+        try {
+            connection = DriverManager.getConnection(db);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(-1);
+        }
         if (!update(initialize).isPresent()) {
             System.exit(-1);
         }
@@ -107,4 +113,11 @@ public class SqliteDAO implements DateMeDAO {
     public List<Profile> findMostCompatible(Profile profile, int count) {
         return null;
     }
+//    public String entityToTableName(Class<?> entityType) {
+//        if (entityType.equals(Profile.class)) {
+//            return "profiles";
+//        }
+//    }
+
+
 }

@@ -1,8 +1,8 @@
 package com.dateme.api;
 
 import com.dateme.api.dao.DateMeDAO;
-import com.dateme.core.RGB;
-import com.dateme.core.Profile;
+import com.dateme.core.model.RGB;
+import com.dateme.core.model.Profile;
 
 import java.util.Optional;
 
