@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Dateme.com - Find your soul mate</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+    </head>
+    <body>
+        <div class="container">
+            <h1>Dateme.com</h1>
+            <hr />
+            <div id="wrapper">
+                <div id="init" class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <h2>Log In</h2>
+                        <form id="log-in-form">
+                            <div class="form-group">
+                                <label for="login-email">Email address</label>
+                                <input type="email" class="form-control" id="login-email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-pw">Password</label>
+                                <input type="password" class="form-control" id="login-pw" placeholder="Password">
+                            </div>
+                            <button class="btn" type="button" id="login-btn">Log in</button>
+                        </form>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <h2>Sign up!</h2>
+                        <form id="sign-up-form">
+                            <div class="form-group">
+                                <label for="signup-email">Email address</label>
+                                <input type="email" class="form-control" id="signup-email" placeholder="Email">
+                            </div>
+                            <div class="form-group">
+                                <label for="signup-pw">Password</label>
+                                <input type="password" class="form-control" id="signup-pw" placeholder="Password">
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" placeholder="Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="color">Favorite Color</label>
+                                <input type="color" class="form-control" id="color" placeholder="Favorite Color">
+                            </div>
+                            <div class="form-group">
+                                <label for="number">Favorite Number</label>
+                                <input type="number" class="form-control" id="number" placeholder="Favorite Number">
+                            </div>
+                            <button class="btn" type="button" id="signup-btn">Sign up!</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
+
+<script type="text/template" id="current-user-template">
+    <div id="current-user">
+        <h2>Welcome ${name} - ${email}</h2>
+        <p>Your favorite color is <span style="color:${color}">${color}</span>.</p>
+        <p>Your favorite number is ${number}.</p>
+    </div>
+    <hr />
+    <div id="profiles">
+        <h2>Profiles</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Color</th>
+                <th>Number</th>
+                <th>Compatibility</th>
+            </tr>
+            <tbody id="profile-list">
+            <tbody>
+        </table>
+    </div>
+</script>
+<script type="text/template" id="single-profile-template">
+    <tr>
+        <td>${name}</td>
+        <td>${email}</td>
+        <td style="color: ${color}">${color}</td>
+        <td>${number}</td>
+        <td><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>??</td>
+    </tr>
+</script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+
+<script>
+
+    var DomDataService = (function () {
+        return {
+            getSignUpObject: function ($form) {
+                return {
+                    email: $form.find("#signup-email").val(),
+                    pw: $form.find("#signup-pw").val(),
+                    name: $form.find("#name").val(),
+                    rgb: $form.find("#color").val(),
+                    number: parseInt($form.find("#number").val(), 10)
+                };
+            }
+        };
+    }());
+
+    var UIService = (function () {
+
+        var applyTemplate = function (template, user) {
+            return template 
+                .replace(/\${name}/g, user.profile.name)
+                .replace(/\${email}/g, user.email)
+                .replace(/\${color}/g, user.profile.color)
+                .replace(/\${number}/g, user.profile.number);
+        };
+
+        var $wrapper = $("#wrapper");
+        var currentUserTemplate = $("#current-user-template").html();
+        var singleProfileTemplate = $("#single-profile-template").html();
+
+        return {
+            showCurrentUser: function (currentUser) {
+                $wrapper.html(applyTemplate(currentUserTemplate, currentUser));
+            },
+            showAllProfiles: function (profiles) {
+                //TODO: this assumes that current user template has been redered. :(
+                var html = profiles.map(function (p) {
+                    return applyTemplate(singleProfileTemplate, p);
+                }).reduce(function (p, c) {
+                    return p + c;
+                });
+                $("#profile-list").html(html);
+            }
+        };
+    }());
+
+
+    var DateMeService = (function () {
+        var user, auth;
+
+        var REST_SERVER = "http://localhost:8080/";
+        var USER_ENDPOINT = "api/user";
+
+        var service = {
+            setCurrentUser: function (u) {
+                user = u;
+            },
+            getCurrentUser: function () { return user; },
+            getAllProfiles: function () {
+                return $.ajax({
+                    type: "GET",
+                    url: REST_SERVER + USER_ENDPOINT,
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: { "Authorization": auth }
+                });
+            },
+            getUser: function (email) {
+                return $.ajax({
+                    type: "GET",
+                    url: REST_SERVER + USER_ENDPOINT + "/" + email,
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: { "Authorization": auth }
+                });
+            },
+            login: function (email, pw) {
+                auth = "Basic " + window.btoa(unescape(encodeURIComponent(email + ":" + pw)));
+                return service.getUser(email).done(function(u) {
+                });
+            },
+            signup: function (userData) {
+                if (typeof user == "undefined") {
+                    return $.ajax({
+                        type: "POST",
+                        url: REST_SERVER + USER_ENDPOINT,
+                        data: JSON.stringify(userData),
+                        dataType: "json",
+                        contentType: "application/json"
+                    });
+                }
+            }
+        };
+        return service;
+    }());
+
+
+    $("#login-btn").click(function () {
+        DateMeService.login($("#login-email").val(), $("#login-pw").val())
+            .done(function (user) {
+                DateMeService.setCurrentUser(user);
+                UIService.showCurrentUser(user);
+                DateMeService.getAllProfiles().done(function (profiles) {
+                    UIService.showAllProfiles(profiles);
+                });
+            })
+            .fail(function (result) {
+                console.log(arguments);
+            });
+    });
+
+
+    $("#signup-btn").click(function () {
+        var data = DomDataService.getSignUpObject($("#sign-up-form"));
+        DateMeService.signup(data)
+            .done(function (user) {
+                DateMeService.setCurrentUser(user);
+                UIService.showCurrentUser(user);
+                DateMeService.getAllProfiles();
+            })
+            .fail(function (result) {
+                console.log(result);
+            });
+    });
+
+
+
+
+</script>
