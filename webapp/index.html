@@ -88,7 +88,7 @@
         <td>${email}</td>
         <td style="color: ${color}">${color}</td>
         <td>${number}</td>
-        <td><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>??</td>
+        <td id="score-${email-id}"><span class="glyphicon glyphicon-heart" aria-hidden="true"></span>??</td>
     </tr>
 </script>
 
@@ -117,9 +117,12 @@
             return template 
                 .replace(/\${name}/g, user.profile.name)
                 .replace(/\${email}/g, user.email)
+                .replace(/\${email-id}/g, emailToId(user.email))
                 .replace(/\${color}/g, user.profile.color)
                 .replace(/\${number}/g, user.profile.number);
         };
+
+        var emailToId = function (email) { return email.replace("@","-").replace(".","-"); }
 
         var $wrapper = $("#wrapper");
         var currentUserTemplate = $("#current-user-template").html();
@@ -137,6 +140,13 @@
                     return p + c;
                 });
                 $("#profile-list").html(html);
+            },
+            showCompatibility: function (targetUser, score) {
+                //write the DOM manipulation to reflect
+                var email = emailToId(targetUser.email); //TODO: repeated code from line 120. Factor out
+                var x = $("#score-" + email);
+                console.log(x, score);
+                x.html(""+score);
             }
         };
     }());
@@ -147,8 +157,18 @@
 
         var REST_SERVER = "http://localhost:8080/";
         var USER_ENDPOINT = "api/user";
+        var SCORE_ENDPOINT = "api/score";
 
         var service = {
+            getScore: function (user1, user2) {
+                return $.ajax({
+                    type: "GET",
+                    url: REST_SERVER + SCORE_ENDPOINT + "?user1=" + user1.email + "&user2=" + user2.email,
+                    dataType: "json",
+                    contentType: "application/json",
+                    headers: { "Authorization": auth }
+                });
+            },
             setCurrentUser: function (u) {
                 user = u;
             },
